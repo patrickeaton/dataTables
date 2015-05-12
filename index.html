@@ -29,7 +29,8 @@
 					if(page.page == 0){
 						$("#pagination_first").addClass("disabled");
 						$("#pagination_prev").addClass("disabled");
-					}else if(page.page == page.pages-1){
+					}
+					if(page.page + 1 >= page.pages){
 						$("#pagination_next").addClass("disabled");
 						$("#pagination_last").addClass("disabled");
 					}
@@ -40,9 +41,12 @@
 			}
 
 			function addFilter(column,search_term){
-
-				filters.push({"column":column,"search_term":search_term});
-				applyFilters();
+				if(search_term != ""){
+					filters.push({"column":column,"search_term":search_term});
+					$("#search_term").val("");
+					applyFilters();
+				}
+				
 			}
 
 			function removeFilter(filter_id){
@@ -55,8 +59,6 @@
 				filters = [];
 				applyFilters();
 			}
-
-		
 
 			function updateBreadcrumbs(){
 					$("#filters").html("");
@@ -92,7 +94,7 @@
 
 				$('#example').DataTable().search("");
 				var i = 0;
-				$('#example').DataTable().columns().each(function(){
+				$('#example').DataTable().columns().every(function(){
 					$('#example').DataTable().column(i).search("");
 					i++
 				});
@@ -131,7 +133,7 @@
 			 <div class="navbar-inner">
 			<b class="brand" href="javascript:void(0);">Search</b>
   				<form class="navbar-form pull-left">
-  					<select id="search_column">
+  					<select id="search_column" class="span2">
   						<option value="global">Global</option>
   						<option value="0">Name</option>
   						<option value="1">Position</option>
@@ -140,7 +142,7 @@
   						<option value="4">Start Date</option>
   						<option value="5">Salary</option>
   					</select>
-  				<input type="text" class="span2" style="height: 30px;" id="search_term">
+  				<input type="text" class="span3" style="height: 30px;" id="search_term">
   				<button class="btn btn-success" onclick="addFilter($('#search_column').val(),$('#search_term').val()); return false;" >Search</button>
   				<button class="btn btn-danger"  onclick="resetFilters();return false;" >Reset</button>
 			</form>
